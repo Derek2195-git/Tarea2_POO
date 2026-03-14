@@ -9,8 +9,6 @@ import java.util.*;
 public class CatalogoMusica {
     private ArrayList<Musica> canciones;
 
-    Scanner teclado = new Scanner(System.in);
-
     public CatalogoMusica() {
         canciones = new ArrayList<Musica>();
     }
@@ -31,7 +29,7 @@ public class CatalogoMusica {
     }
 
     public String mostrarColeccion() {
-        String cadena = null;
+        String cadena = "";
 
         for (Musica melodia : canciones) {
             cadena+= melodia+"\n";
@@ -64,7 +62,6 @@ public class CatalogoMusica {
         CatalogoMusica modelo = new CatalogoMusica();
         Vista vista = new Vista();
 
-        System.out.println("Hello World!");
         Controlador controlador = new Controlador(modelo, vista);
         controlador.iniciar();
 
@@ -93,7 +90,7 @@ public class CatalogoMusica {
         HashMap<String, Integer> ListaDeCantantes = new HashMap<>();
         for (Musica cancion : canciones) {
 
-            if(!ListaDeCantantes.containsKey(cancion.getGenero())) {
+            if(!ListaDeCantantes.containsKey(cancion.getCantante())) {
                 ListaDeCantantes.put(cancion.getCantante(), 1);
             } else {
                 int valor = ListaDeCantantes.get(cancion.getCantante());
@@ -111,7 +108,60 @@ public class CatalogoMusica {
                 melodias.add(melodia);
             }
         }
-        return canciones;
+        return melodias;
     }
+
+    // Falto:
+
+    // Obtener las melodias de un artista
+    public ArrayList<Musica> obtenerMelodiasDeArtista(String artista) {
+        ArrayList<Musica> melodias = new ArrayList<>();
+        for (Musica melodia : canciones) {
+            if (artista.equalsIgnoreCase(melodia.getCantante())) {
+                melodias.add(melodia);
+            }
+        }
+        return melodias;
+    }
+
+
+    // Eliminar melodias en base a su nombre
+    public boolean eliminarMelodia(String nombreCancion) {
+
+        /* Podemos borrar la canción usando un ciclo for y removiendola si se encuentra
+           el nombre de dicha canción, pero no se borraran las que tengan nombres
+           repetidos. Es por esto que usare un lambda
+         */
+        // Removemos las melodias que tengan un nombre igual al dado por el usuario
+        return canciones.removeIf(melodia -> melodia.getNombre().equalsIgnoreCase(nombreCancion));
+    }
+
+    // Ultimo metodo: Modificar los datos de una melodia en caso de error
+    public boolean modificarMelodia(String nombreBusqueda, Musica datosCambiados) {
+        for (int i = 0; i < canciones.size(); i++) {
+            if (canciones.get(i).getNombre().equalsIgnoreCase(nombreBusqueda)) {
+                canciones.set(i, datosCambiados);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean comprobarSiExiste(String cancionABuscar) {
+        for (Musica melodia : canciones) {
+            if(melodia.getNombre().equalsIgnoreCase(cancionABuscar)) return true;
+        }
+        return false;
+    }
+
+    public Musica consultarUnaMelodia(String nombreMelodia) {
+
+        for (Musica melodia : canciones) {
+            if(melodia.getNombre().equalsIgnoreCase(nombreMelodia)) return melodia;
+        }
+        return null;
+    }
+
+
 
 }

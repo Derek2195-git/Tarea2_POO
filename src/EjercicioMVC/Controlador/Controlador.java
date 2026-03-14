@@ -44,11 +44,26 @@ public class Controlador {
                 case 7:
                     mostrarTodasDeUnGenero();
                     break;
+                case 8:
+                    mostrarTodasDeUnCantante();
+                    break;
                 case 9:
+                    borrarUnaMelodia();
+                    break;
+                case 10:
+                    modificarUnaMelodia();
+                    break;
+                case 11:
+                    consultarUnaMelodia();
+                    break;
+                case 12:
                     System.out.println("Adios!");
                     break;
+                default:
+                    System.out.println("La opción ingresada no existe, ingresala una opción de nuevo");
+                    break;
             }
-        } while (opcion != 9);
+        } while (opcion != 12);
     }
 
     public void insertarNuevaMusica() {
@@ -61,6 +76,7 @@ public class Controlador {
         String cadena = modelo.mostrarColeccion();
         vista.mostrarTodasLasMusicas(cadena);
     }
+
 
     public void mostrarCantidadPorGenero() {
         // String generoCancion = vista.leerCadena("genero");
@@ -88,5 +104,35 @@ public class Controlador {
         String genero = vista.leerCadena("genero");
         ArrayList<Musica> canciones = modelo.obtenerCancionesUnGenero(genero);
         vista.mostrarCancionesUnGenero(canciones, genero);
+    }
+
+    public void mostrarTodasDeUnCantante() {
+        String cantante = vista.leerCadena("cantante");
+        ArrayList<Musica> canciones = modelo.obtenerMelodiasDeArtista(cantante);
+        vista.mostrarCancionesUnArtista(canciones, cantante);
+    }
+
+    public void borrarUnaMelodia() {
+        String nombreMelodia = vista.leerCadena("nombre de la melodia");
+        boolean exitoDeLaEliminacion = modelo.eliminarMelodia(nombreMelodia);
+        vista.mostrarExitoEliminacion(exitoDeLaEliminacion);
+    }
+
+    public void modificarUnaMelodia() {
+        String nombreMelodiaAModificar = vista.leerCadena("nombre de la canción a modificar");
+        if (modelo.comprobarSiExiste(nombreMelodiaAModificar)) {
+            Musica cancionModificada = vista.capturarMusica();
+            boolean exitoDeLaModificacion = modelo.modificarMelodia(nombreMelodiaAModificar, cancionModificada);
+            vista.mostrarExitoModificacion(exitoDeLaModificacion);
+        } else {
+            vista.mostrarExitoModificacion(false);
+        }
+
+    }
+
+    public void consultarUnaMelodia() {
+        String nombreMelodiaConsultada = vista.leerCadena("nombre de la canción a consultar");
+        Musica musicaConsultada = modelo.consultarUnaMelodia(nombreMelodiaConsultada);
+        vista.mostrarCancionConsultada(musicaConsultada);
     }
 }
